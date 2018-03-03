@@ -15,7 +15,7 @@ public class ClickListener : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// If user clicked, spawn a new Asteroid.
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetMouseButtonDown(0)) { // Returns true if button was recently pushed down
 			// We get the position of the cursor in pixels,
 			// and transform it into world coordinates
 			Vector3 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
