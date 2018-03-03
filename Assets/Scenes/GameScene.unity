@@ -473,6 +473,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bce26a4a18fa490ab7a6b9c2a4e13dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  asteroid: {fileID: 1789009494078298, guid: d12fc70cd0f01415d9cdcd75b5215924, type: 2}
+  camera: {fileID: 282840813}
 --- !u!65 &1254284343
 BoxCollider:
   m_ObjectHideFlags: 0
