@@ -5,7 +5,7 @@ using UnityEngine;
 public class EarthTurretBehaviour : MonoBehaviour {
 
 	// Arbitrary missile speed
-	private const float S = 3;
+	private const float S = 8;
 
 	// Diameter of our danger zone (set for DangerZone game object)
 	private const float dangerZoneDiameter = 3;
@@ -36,18 +36,17 @@ public class EarthTurretBehaviour : MonoBehaviour {
 			GameObject instance = spawning[0];
 			AsteroidBehaviour asteroidScript = instance.GetComponent<AsteroidBehaviour>() as AsteroidBehaviour;
 			if (TrajectoryWithinSafetyZone(asteroidScript.mousePositionAtTakeoff, asteroidScript.velocity)) {
-				fireMissile(asteroidScript);
+				fireMissile(asteroidScript, instance);
 			}
 			instance.tag = "Untagged";
 		}
 	}
 
-	private void fireMissile(AsteroidBehaviour asteroid) {
+	private void fireMissile(AsteroidBehaviour asteroidScript, GameObject asteroidInstance) {
 		GameObject instance = Instantiate(missile, new Vector3 (0, 0, 0), Quaternion.identity);
 		MissileBehaviour missileScript = instance.GetComponent<MissileBehaviour>() as MissileBehaviour;
-		missileScript.velocity = new Vector3(0, 0, 0);
-		missileScript.velocity = CalculateMissileVelocity(asteroid.mousePositionAtTakeoff, asteroid.velocity);
-		Debug.Log(missileScript.velocity.x + " " + missileScript.velocity.z);
+		missileScript.velocity = CalculateMissileVelocity(asteroidScript.mousePositionAtTakeoff, asteroidScript.velocity);
+		missileScript.target = asteroidInstance;
 	}
 
 	// Calculates whether an object will enter the safety zone or not
