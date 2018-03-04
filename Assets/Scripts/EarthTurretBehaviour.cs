@@ -13,6 +13,9 @@ public class EarthTurretBehaviour : MonoBehaviour {
 	private const float dangerZoneRadius = dangerZoneDiameter / 2;
 	// Middle point of danger zone is (0,0,0)
 
+	public GameObject asteroid;
+	public GameObject[] spawning;
+
 	// Use this for initialization
 	void Start () {
 
@@ -21,6 +24,19 @@ public class EarthTurretBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	// LateUpdate so AsteroidBehaviour has updated first
+	void LateUpdate() {
+		if (Input.GetMouseButtonUp (0)) {
+			spawning = GameObject.FindGameObjectsWithTag ("Spawning");
+			// TODO: fix the assumption here
+			GameObject instance = spawning[0];
+			AsteroidBehaviour asteroidScript = instance.GetComponent<AsteroidBehaviour>() as AsteroidBehaviour;
+			bool willHit = TrajectoryWithinSafetyZone(asteroidScript.mousePositionAtTakeoff, asteroidScript.velocity);
+			// TODO: Send missile
+			instance.tag = "Untagged";
+		}
 	}
 
 	// Calculates whether an object will enter the safety zone or not
@@ -38,8 +54,15 @@ public class EarthTurretBehaviour : MonoBehaviour {
 		float x1 = asteroidPosition.x;
 		float z1 = asteroidPosition.z;
 		// Next position
-		float x2 = x1 + asteroidVelocity.x;
-		float z2 = z1 + asteroidVelocity.z;
+		// Since we added movespeed to the velocity, the velocity can be quite high.
+		// This can create a bug where the 'next' spot is actually after Earth,
+		// so we make the difference here small
+		float x2 = x1 + (asteroidVelocity.x/1000);
+		float z2 = z1 + (asteroidVelocity.z/1000);
+
+		// Check that asteroid is moving
+		if (x1 == x2 && z1 == z2)
+			return false;
 
 		// Equation derived on Wikipedia: https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
 		// Since x0 = 0 and z0 = 0 (center of danger zone) equation is simplified:
