@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AsteroidBehaviour : MonoBehaviour {
 
+	private const float maxspeed = 12;
+	private const float deathTimer = 5;
+
 	private bool spawning;
 	private double secondsAlive;
 	private Camera cam;
@@ -17,6 +20,8 @@ public class AsteroidBehaviour : MonoBehaviour {
 		spawning = true;
 		secondsAlive = 0;
 		cam = Camera.main;
+		Vector3 mousePosition = cam.ScreenToWorldPoint (Input.mousePosition);
+		mousePositionBeforeTakeoff = new Vector3 (mousePosition.x, 0, mousePosition.z);
 	}
 	
 	// Update is called once per frame
@@ -44,6 +49,8 @@ public class AsteroidBehaviour : MonoBehaviour {
 				float aSquared = Mathf.Pow(position.x - mousePositionBeforeTakeoff.x, 2);
 				float bSquared = Mathf.Pow(position.z - mousePositionBeforeTakeoff.z, 2);
 				float movespeed = Mathf.Sqrt(aSquared + bSquared) / Time.deltaTime;
+				if (movespeed > maxspeed)
+					movespeed = maxspeed;
 				velocity = velocity * movespeed;
 				// velocity is now vector for where asteroid goes in 1 second
 				mousePositionAtTakeoff = position;
@@ -55,7 +62,7 @@ public class AsteroidBehaviour : MonoBehaviour {
 
 		transform.Translate(velocity * Time.deltaTime);
 
-		if (secondsAlive > 10) {
+		if (secondsAlive > deathTimer) {
 			// We delete old, redundant asteroids
 			Destroy(this.gameObject);
 		}
