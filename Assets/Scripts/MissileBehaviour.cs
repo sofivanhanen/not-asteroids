@@ -14,6 +14,11 @@ public class MissileBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		// Couldn't calculate direction as we can't hit the asteroid
+		if (velocity.x == 0 && velocity.z == 0) {
+			Destroy(this.gameObject);
+		}
+
 		transform.Translate(velocity * Time.deltaTime);
 
 	}
