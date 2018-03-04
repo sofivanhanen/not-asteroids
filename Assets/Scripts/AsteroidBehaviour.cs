@@ -54,7 +54,6 @@ public class AsteroidBehaviour : MonoBehaviour {
 		secondsAlive += Time.deltaTime;
 
 		transform.Translate(velocity * Time.deltaTime);
-		//transfrom.Translate(direction*
 
 		if (secondsAlive > 10) {
 			// We delete old, redundant asteroids

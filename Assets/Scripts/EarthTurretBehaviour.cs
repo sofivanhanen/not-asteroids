@@ -16,6 +16,8 @@ public class EarthTurretBehaviour : MonoBehaviour {
 	public GameObject asteroid;
 	public GameObject[] spawning;
 
+	public GameObject missile;
+
 	// Use this for initialization
 	void Start () {
 
@@ -33,10 +35,19 @@ public class EarthTurretBehaviour : MonoBehaviour {
 			// TODO: fix the assumption here
 			GameObject instance = spawning[0];
 			AsteroidBehaviour asteroidScript = instance.GetComponent<AsteroidBehaviour>() as AsteroidBehaviour;
-			bool willHit = TrajectoryWithinSafetyZone(asteroidScript.mousePositionAtTakeoff, asteroidScript.velocity);
-			// TODO: Send missile
+			if (TrajectoryWithinSafetyZone(asteroidScript.mousePositionAtTakeoff, asteroidScript.velocity)) {
+				fireMissile(asteroidScript);
+			}
 			instance.tag = "Untagged";
 		}
+	}
+
+	private void fireMissile(AsteroidBehaviour asteroid) {
+		GameObject instance = Instantiate(missile, new Vector3 (0, 0, 0), Quaternion.identity);
+		MissileBehaviour missileScript = instance.GetComponent<MissileBehaviour>() as MissileBehaviour;
+		missileScript.velocity = new Vector3(0, 0, 0);
+		missileScript.velocity = CalculateMissileVelocity(asteroid.mousePositionAtTakeoff, asteroid.velocity);
+		Debug.Log(missileScript.velocity.x + " " + missileScript.velocity.z);
 	}
 
 	// Calculates whether an object will enter the safety zone or not

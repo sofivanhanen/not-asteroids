@@ -370,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroid: {fileID: 0}
   spawning: []
+  missile: {fileID: 1638107793613886, guid: 595c349091ac844c084c031eb7c521ad, type: 2}
 --- !u!1 &1109648966
 GameObject:
   m_ObjectHideFlags: 0

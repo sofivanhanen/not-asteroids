@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\AsteroidBehaviour.cs" />
      <Compile Include="Assets\Scripts\ClickListener.cs" />
      <Compile Include="Assets\Scripts\EarthTurretBehaviour.cs" />
+     <Compile Include="Assets\Scripts\MissileBehaviour.cs" />
  <Reference Include="Unity.PackageManagerUI.Editor">
  <HintPath>/home/local/sofvanh/Documents/Not Asteroids 3D/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
