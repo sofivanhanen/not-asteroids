@@ -93,10 +93,8 @@ public class EarthTurretBehaviour : MonoBehaviour {
 	private Vector3 CalculateMissileVelocity(Vector3 asteroidPosition, Vector3 asteroidVelocity) {
 		// As per https://stackoverflow.com/questions/17204513/how-to-find-the-interception-coordinates-of-a-moving-target-in-3d-space?noredirect=1&lq=1
 
-		// TODO: This is slightly incorrect because we should have seperate direction vector and speed
-		// now a, b, c are calculated using speed even though they should be using direction only
-
 		// Helpers - simplified by a lot because missile origin is at (0,0,0)
+		// Also, we're not using asteroid's speed as it's own variable, it's a part of the velocity vector already
 		float a = Mathf.Pow(asteroidVelocity.x, 2) + Mathf.Pow(asteroidVelocity.z, 2) - Mathf.Pow(S, 2);
 		float b = 2 * ((asteroidPosition.x * asteroidVelocity.x) + (asteroidPosition.z * asteroidVelocity.z));
 		float c = Mathf.Pow (asteroidPosition.x, 2) + Mathf.Pow (asteroidPosition.z, 2);
@@ -113,8 +111,8 @@ public class EarthTurretBehaviour : MonoBehaviour {
 		}
 
 		// Final missile velocity
-		Vector3 missileSpeed = (asteroidPosition + (t * asteroidVelocity)) / (t * S);
-		return missileSpeed;
+		Vector3 missileVelocity = (asteroidPosition + (t * asteroidVelocity)) / (t * S);
+		return missileVelocity * S;
 	}
 
 	// Check to make sure the time we use is the smallest available and usable (not NaN or <0)
