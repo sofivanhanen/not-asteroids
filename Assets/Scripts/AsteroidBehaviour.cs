@@ -45,6 +45,7 @@ public class AsteroidBehaviour : MonoBehaviour {
 				float bSquared = Mathf.Pow(position.z - mousePositionBeforeTakeoff.z, 2);
 				float movespeed = Mathf.Sqrt(aSquared + bSquared) / Time.deltaTime;
 				velocity = velocity * movespeed;
+				// velocity is now vector for where asteroid goes in 1 second
 				mousePositionAtTakeoff = position;
 			}
 			return;
