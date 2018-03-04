@@ -17,6 +17,7 @@ public class MissileBehaviour : MonoBehaviour {
 	void Update () {
 
 		// Couldn't calculate direction as we can't hit the asteroid
+		// TODO: A redundant missile shouldn't be spawned in the first place
 		if (velocity.x == 0 && velocity.z == 0) {
 			Destroy(this.gameObject);
 		}
@@ -33,6 +34,7 @@ public class MissileBehaviour : MonoBehaviour {
 		} else {
 			// Going away from our targer, which means we hit already!
 			// TODO: We shouldn't have drawn the missile at this point
+			// The logic here overall is prone to visual errors
 			Destroy(target);
 			Destroy(this.gameObject);
 		}

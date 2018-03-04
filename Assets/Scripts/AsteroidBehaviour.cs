@@ -23,6 +23,10 @@ public class AsteroidBehaviour : MonoBehaviour {
 		Vector3 mousePosition = cam.ScreenToWorldPoint (Input.mousePosition);
 		mousePositionBeforeTakeoff = new Vector3 (mousePosition.x, 0, mousePosition.z);
 	}
+
+	// TODO: Asteroid could be transparent while spawning
+	// TODO: Shouldn't be able to spawn asteroids inside the safe zone
+	// TODO: Improve control over asteroid speed
 	
 	// Update is called once per frame
 	void Update () {
