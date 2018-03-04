@@ -91,29 +91,46 @@ public class EarthTurretBehaviour : MonoBehaviour {
 
 	// Calculate velocity vector for missile
 	private Vector3 CalculateMissileVelocity(Vector3 asteroidPosition, Vector3 asteroidVelocity) {
-		// Using answer from https://stackoverflow.com/questions/2248876/2d-game-fire-at-a-moving-target-by-predicting-intersection-of-projectile-and-u
-		Vector3 missileVelocity = new Vector3(0, 0, 0);
+		// As per https://stackoverflow.com/questions/17204513/how-to-find-the-interception-coordinates-of-a-moving-target-in-3d-space?noredirect=1&lq=1
 
-		// Start by rotating the axes counterclockwise so that asteroid and earth are both on the Z axis
-		float angle = Mathf.Tan(Mathf.Abs(asteroidPosition.x)/Mathf.Abs(asteroidPosition.z));
+		// TODO: This is slightly incorrect because we should have seperate direction vector and speed
+		// now a, b, c are calculated using speed even though they should be using direction only
 
-		// Calculate new position of asteroid
-		float asteroidPositionRotatedX = 0;
-		float asteroidPositionRotatedZ = asteroidPosition.z / Mathf.Cos(angle);
+		// Helpers - simplified by a lot because missile origin is at (0,0,0)
+		float a = Mathf.Pow(asteroidVelocity.x, 2) + Mathf.Pow(asteroidVelocity.z, 2) - Mathf.Pow(S, 2);
+		float b = 2 * ((asteroidPosition.x * asteroidVelocity.x) + (asteroidPosition.z * asteroidVelocity.z));
+		float c = Mathf.Pow (asteroidPosition.x, 2) + Mathf.Pow (asteroidPosition.z, 2);
 
-		// Calculate new components (old are in asteroidVelocity)
-		float asteroidVelocityRotatedX = asteroidVelocity.x / Mathf.Cos(angle);
-		float asteroidVelocityRotatedZ = asteroidVelocity.z / Mathf.Cos(angle);
+		// Time calculated
+		float t1 = (-b + Mathf.Sqrt(Mathf.Pow(b, 2) - (4 * a * c))) / (2 * a);
+		float t2 = (-b - Mathf.Sqrt(Mathf.Pow (b, 2) - (4 * a * c))) / (2 * a);
 
-		// X component of missile velocity is same as asteroid's
-		float missileVelocityRotatedX = asteroidVelocityRotatedX;
-		// Z component is calculated with Pythagorean theorem
-		float missileVelocityRotatedZ = Mathf.Sqrt(Mathf.Pow(S,2)-Mathf.Pow(missileVelocityRotatedX,2));
+		// Final time
+		float t = smallestUsableTime(t1, t2);
 
-		// Rotate back and we get correct component
-		missileVelocity.x = missileVelocityRotatedX * Mathf.Cos(angle);
-		missileVelocity.z = missileVelocityRotatedZ * Mathf.Cos(angle);
+		if (t == -1) { // Can't hit! Asteroid is probably too fast
+			return new Vector3(0,0,0);
+		}
 
-		return missileVelocity;
+		// Final missile velocity
+		Vector3 missileSpeed = (asteroidPosition + (t * asteroidVelocity)) / (t * S);
+		return missileSpeed;
+	}
+
+	// Check to make sure the time we use is the smallest available and usable (not NaN or <0)
+	private float smallestUsableTime(float t1, float t2) {
+		if (float.IsNaN(t1) || t1 < 0) {
+			if (float.IsNaN(t2) || t2 < 0) {
+				return -1;
+			} else {
+				return t2;
+			}
+		} else {
+			if (float.IsNaN(t2) || t2 < 0 || t1 < t2) {
+				return t1;
+			} else {
+				return t2;
+			}
+		}
 	}
 }
